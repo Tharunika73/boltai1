@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { AuthProvider } from './components/Auth/AuthProvider';
 import { Header } from './components/Layout/Header';
+import { Footer } from './components/Layout/Footer';
 import { HomePage } from './pages/HomePage';
-import { LoginPage } from './pages/LoginPage';
-import { CartPage } from './pages/CartPage';
+import ContactPage from './pages/ContactPage';
 import { ChatInterface } from './components/Chat/ChatInterface';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [showLogin, setShowLogin] = useState(false);
-  const [showCart, setShowCart] = useState(false);
   const [showChat, setShowChat] = useState(false);
+
+  // all pages handled in ONE state
+  const [activePage, setActivePage] = useState<
+    'home' | 'contact' | 'profile' | 'cart' | 'login'
+  >('home');
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -22,35 +26,28 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-gray-50">
+      {/* flex column so footer stays at bottom */}
+      <div className="min-h-screen bg-gray-50 flex flex-col">
         <Header
           onSearch={handleSearch}
-          onLoginClick={() => setShowLogin(true)}
-          onCartClick={() => setShowCart(true)}
+          clearSearch={clearSearch}
+          setActivePage={setActivePage}
         />
-        
-        <main>
-          <HomePage
-            searchQuery={searchQuery}
-            onClearSearch={clearSearch}
-          />
+
+        {/* main should grow to fill space */}
+        <main className="flex-1 p-4">
+          {activePage === 'home' && <HomePage searchQuery={searchQuery} />}
+          {activePage === 'contact' && <ContactPage />}
+          {activePage === 'profile' && <ProfilePage />}
+         
         </main>
 
-        {/* Modals and Overlays */}
-        <LoginPage
-          isOpen={showLogin}
-          onClose={() => setShowLogin(false)}
-        />
+        
 
-        <CartPage
-          isOpen={showCart}
-          onClose={() => setShowCart(false)}
-        />
-
-        <ChatInterface
-          isOpen={showChat}
-          onToggle={() => setShowChat(!showChat)}
-        />
+        {/* footer at the bottom */}
+        <Footer setActivePage={setActivePage} />
+        {/* Chat Interface overlay or fixed position */}
+        <ChatInterface isOpen={showChat} onToggle={() => setShowChat(!showChat)} />
       </div>
     </AuthProvider>
   );
