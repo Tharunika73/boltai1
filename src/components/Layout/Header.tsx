@@ -4,7 +4,7 @@ import React from "react";
 interface HeaderProps {
   onSearch: (query: string) => void;
   clearSearch: () => void;
-  setActivePage: (page: "home" | "contact" | "profile") => void;
+  setActivePage: (page: "home" | "contact" | "profile" | "login") => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ onSearch, clearSearch, setActivePage }) => {
@@ -22,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, clearSearch, setActive
           </h1>
         </div>
 
-        {/* Right side navigation */}
+        {/* Navigation Links on the right */}
         <div className="flex items-center space-x-6">
           <button
             onClick={() => setActivePage("home")}
@@ -50,6 +50,13 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, clearSearch, setActive
             <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
               3
             </span>
+          </button>
+          {/* Login Button */}
+          <button
+            onClick={() => setActivePage("login")}
+            className="text-gray-700 hover:text-blue-600 transition-colors"
+          >
+            Login
           </button>
         </div>
       </div>
